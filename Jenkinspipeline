@@ -1,0 +1,14 @@
+pipeline{
+    agent any
+    stages{
+        stage('checkout scm'){
+            node = label('aws_node')
+            echo "this stage runs on node ($env.aws_node)"
+        }
+
+        stage('Build'){
+            node = label('dev_node')
+            echo "this stage runs on node ($env.dev_node)"
+        }
+    }
+}
