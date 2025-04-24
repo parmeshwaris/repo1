@@ -2,12 +2,13 @@ pipeline{
     agent none
     stages{
         stage('checkout scm'){
-         agent{
+          agent{
             label 'slave1'
              }
-       steps{
+            steps{
             echo "this stage runs on node ($env.label)"
-        }
+            }
+           }
 
         stage('Build'){
               agent{
