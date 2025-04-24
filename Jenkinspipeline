@@ -1,21 +1,23 @@
-pipeline{
+pipeline {
     agent none
-    stages{
-        stage('checkout scm'){
-          agent{
-            label 'slave1'
-             }
-            steps{
-            echo "this stage runs on node ($env.label)"
-            }
-           }
 
-        stage('Build'){
-              agent{
-            label 'slave2'
-               }
-           steps{
-            echo "this stage runs on node ($env.label)"
+    stages {
+        stage('checkout scm') {
+            agent {
+                label 'slave1'
+            }
+            steps {
+                echo "This stage runs on node (slave1)"
+            }
+        }
+
+        stage('Build') {
+            agent {
+                label 'slave2'
+            }
+            steps {
+                echo "This stage runs on node (slave2)"
+            }
         }
     }
 }
