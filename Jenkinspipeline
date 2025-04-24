@@ -1,14 +1,20 @@
 pipeline{
-    agent any
+    agent none
     stages{
         stage('checkout scm'){
-            node = label('aws_node')
-            echo "this stage runs on node ($env.aws_node)"
+         agent{
+            label 'slave1'
+             }
+       steps{
+            echo "this stage runs on node ($env.label)"
         }
 
         stage('Build'){
-            node = label('dev_node')
-            echo "this stage runs on node ($env.dev_node)"
+              agent{
+            label 'slave2'
+               }
+           steps{
+            echo "this stage runs on node ($env.label)"
         }
     }
 }
