@@ -1,0 +1,28 @@
+pipeline{
+    agent {
+          label 'master'
+    }
+
+    triggers{
+        cron(*/2 * * * 0)
+    }
+
+    parameters{
+        string(name: 'jenkins_path', path: '/var/lib/jenkins/jobs/', desciption: 'path to jenkins job')
+    }
+
+    if (job) {
+                 def successfulBuilds = job.builds.findAll { it.result == hudson.model.Result.SUCCESS }
+                      def buildsToDelete = successfulBuilds.sort { -it.number }.drop(5)  
+                        buildsToDelete.each { 
+                                println "Deleting build #${build.number} of job '${jobName}'"
+                                build.delete()
+                            }
+                        } 
+                        else {
+                            println "Job not found: ${jobName}"
+                        }
+                    }
+                }
+            }
+}
