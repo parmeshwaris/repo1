@@ -7,16 +7,28 @@ pipeline{
         cron(*/2 * * * 0)
     }
 
-    parameters{
-        string(name: 'jenkins_path', path: '/var/lib/jenkins/jobs/', desciption: 'path to jenkins job')
+    environment{
+            JENKINS_PATH : '/var/lib/jenkins/jobs'
     }
 
-    if (job) {
-                 def successfulBuilds = job.builds.findAll { it.result == hudson.model.Result.SUCCESS }
-                      def buildsToDelete = successfulBuilds.sort { -it.number }.drop(5)  
-                        buildsToDelete.each { 
-                                println "Deleting build #${build.number} of job '${jobName}'"
-                                build.delete()
+    stages{
+           stage('cleanup old builds'){
+                 steps{
+                        script{
+
+                                def jobName = String.format("dev-pipeline-%02d", index)
+                                def job = Jenkins.instance.getItem(jobName)
+                                def config = [name:'jenkinspath', path:'env.JENKINS_PATH']
+                                echo "path : ${config.path}"
+                         
+                  
+
+                                if (job) {
+                                          def successfulBuilds = job.builds.findAll { it.result == hudson.model.Result.SUCCESS }
+                                          def buildsToDelete = successfulBuilds.sort { -it.number }.drop(5)  
+                                          buildsToDelete.each { 
+                                                    println "Deleting build #${build.number} of job '${jobName}'"
+                                                    build.delete()
                             }
                         } 
                         else {
